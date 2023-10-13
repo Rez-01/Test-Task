@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using Random = UnityEngine.Random;
 
 public class CubeSpawner : MonoBehaviour
 {
@@ -10,8 +11,9 @@ public class CubeSpawner : MonoBehaviour
     [Header("Spawn Range")]
     [SerializeField] private Vector2 _spawnRangeX;
     [SerializeField] private Vector2 _spawnRangeY;
+    [SerializeField] private Vector2 _spawnRangeZ;
 
-    [SerializeField] private Vector2 _spawnNumberRange;
+    [SerializeField] private int _maxSpawnNumber;
 
     private void OnEnable()
     {
@@ -25,6 +27,17 @@ public class CubeSpawner : MonoBehaviour
 
     private void SpawnCubes()
     {
-        Debug.Log("Hello");
+        if (_maxSpawnNumber <= 0) _maxSpawnNumber = 1;
+
+        for (int i = 0; i < _maxSpawnNumber; i++)
+        {
+            float xPosition = Random.Range(_spawnRangeX.x, _spawnRangeX.y);
+            float yPosition = Random.Range(_spawnRangeY.x, _spawnRangeY.y);
+            float zPosition = Random.Range(_spawnRangeZ.x, _spawnRangeZ.y);
+            
+            Instantiate(_cubePrefab, new Vector3(xPosition, yPosition, zPosition), Quaternion.identity);
+        }
+
+        _spawnButton.interactable = false;
     }
 }
