@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -7,17 +8,16 @@ public class CubeSpawner : MonoBehaviour
 {
     [SerializeField] private Button _spawnButton;
     [SerializeField] private Cube _cubePrefab;
+    [SerializeField] private int _maxSpawnNumber;
     
     [Header("Spawn Range")]
     [SerializeField] private Vector2 _spawnRangeX;
     [SerializeField] private Vector2 _spawnRangeY;
     [SerializeField] private Vector2 _spawnRangeZ;
 
-    [SerializeField] private int _maxSpawnNumber;
+    private List<Cube> _cubes;
 
-    private Cube[] _cubes;
-
-    public static Action<Cube[]> CubesCreated;
+    public static Action<List<Cube>> CubesCreated;
     public static Action<int> GiveCubeIndex;
 
     private void OnEnable()
@@ -36,7 +36,7 @@ public class CubeSpawner : MonoBehaviour
 
         int _spawnNumber = Random.Range(1, _maxSpawnNumber + 1);
 
-        _cubes = new Cube[_spawnNumber];
+        _cubes = new List<Cube>();
 
         for (int i = 0; i < _spawnNumber; i++)
         {
@@ -48,7 +48,7 @@ public class CubeSpawner : MonoBehaviour
             
             GiveCubeIndex?.Invoke(i + 1);
             
-            _cubes[i] = cube;
+            _cubes.Add(cube);
         }
 
         CubesCreated?.Invoke(_cubes);

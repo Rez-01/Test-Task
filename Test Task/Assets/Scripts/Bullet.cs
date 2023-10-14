@@ -3,7 +3,11 @@ using UnityEngine;
 
 public class Bullet : MonoBehaviour
 {
+    [SerializeField] private float _speed;
+    
     private Cube _targetCube;
+
+    public static Action OnCubeHit;
     
     private void OnEnable()
     {
@@ -20,7 +24,7 @@ public class Bullet : MonoBehaviour
         if (_targetCube)
         {
             transform.position = Vector3.MoveTowards(transform.position, 
-                _targetCube.gameObject.transform.position, 2f * Time.deltaTime);
+                _targetCube.gameObject.transform.position, _speed * Time.deltaTime);
         }
     }
     
@@ -32,6 +36,7 @@ public class Bullet : MonoBehaviour
             {
                 cube.StopMovement();
                 Destroy(gameObject);
+                OnCubeHit?.Invoke();
             }
         }
     }
